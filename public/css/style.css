@@ -125,7 +125,7 @@ html, body {
 }
 
 #person {
-    background: url(img/frozen-creek.jpg) no-repeat center;
+    background: url(/img/frozen-creek.jpg) no-repeat center;
     font-size: 20px;
     padding: 1em;
     background-size: 110%;
@@ -165,7 +165,7 @@ summary.title{
     text-align: left;
 }
 .idea-link {
-    background: #5F1707 url(img/link.png) no-repeat;
+    background: #5F1707 url(/img/link.png) no-repeat;
     margin: 0.5em 2em;
     padding: 0.25em;
     background-size: contain;

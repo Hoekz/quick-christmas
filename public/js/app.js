@@ -14,17 +14,17 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
     var ref = firebase.database().ref();
 
     var auth = $auth();
-    scope.authenticated = !!ref.getAuth();
+    scope.authenticated = !!auth.$getAuth();
     scope.init = function(){
-        auth.$authWithOAuthPopup("google",{scope: 'email'}).then(function(authData){
+        auth.$signInWithPopup("google",{scope: 'email'}).then(function(authData){
             var myself = {
-                name: authData.google.cachedUserProfile.name,
-                profile: authData.google.profileImageURL,
-                email: authData.google.email,
-                uid: authData.uid
+                name: authData.user.displayName,
+                profile: authData.user.photoURL,
+                email: authData.user.email,
+                uid: authData.user.uid
             };
             memory.set('me', myself);
-            people.add(authData.uid, myself);
+            people.add(authData.user.uid, myself);
             scope.myImage = memory.get('me').profile;
             scope.authenticated = true;
             people.grabAll(function(people){
@@ -224,7 +224,7 @@ app.factory('people', ['$firebaseArray', function($Array){
     return {
         grabAll: function(callback){
             if(!people){
-                ref = new Firebase('https://quick-christmas.firebaseio.com/members/');
+                ref = firebase.database().ref().child('members');
                 people = $Array(ref);
             }
             people.$loaded(function(){
@@ -232,7 +232,7 @@ app.factory('people', ['$firebaseArray', function($Array){
             });
         },
         get: function(name){
-            if(!ref) ref = new Firebase('https://quick-christmas.firebaseio.com/members/');
+            if(!ref) ref = firebase.database().ref().child('members');
             if(people){
                 var person = null;
                 angular.forEach(people, function(p){
@@ -253,11 +253,11 @@ app.factory('people', ['$firebaseArray', function($Array){
             }
         },
         add: function(uid, person){
-            if(!ref) ref = new Firebase('https://quick-christmas.firebaseio.com/members/');
+            if(!ref) ref = firebase.database().ref().child('members');
             ref.child(uid).update(person);
         },
         addIdea: function(uid, idea, callback){
-            if(!ref) ref = new Firebase('https://quick-christmas.firebaseio.com/members/');
+            if(!ref) ref = firebase.database().ref().child('members');
             idea = angular.copy(idea);
             idea.time = Firebase.ServerValue.TIMESTAMP;
             ref.child(uid).child('ideas').push(idea, callback);
