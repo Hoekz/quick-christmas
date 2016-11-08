@@ -1,0 +1,48 @@
+{
+    "rules": {
+        ".read": false,
+        ".write": false,
+        "allowed": {
+          ".read": "auth !== null",
+          ".write": false
+        },
+        "members": {
+          ".read": "auth !== null",
+          ".write": "auth !== null",
+          "$person": {
+            ".write": "(!data.exists() && auth !== null) || ($person === auth.uid)",
+            ".read": "auth !== null",
+            ".validate": "newData.hasChildren(['profile','name','email']) && root.child('allowed').hasChild(newData.child('name').val())",
+            "ideas": {
+              "$idea": {
+                ".validate": "newData.hasChildren(['time','title','description'])",
+                "time": {
+                  ".validate": "newData.isNumber() && newData.val() <= now && newData.val() > now - 1000"
+                },
+                "title":{
+                  ".validate": "newData.isString() && newData.val().length < 128"
+                },
+                "description": {
+                  ".validate": "newData.isString() && newData.val().length < 2048"
+                },
+                "links": {
+                  "$link": {
+                    "display": {
+                      ".validate": "newData.isString() && newData.val().length < 128"
+                    },
+                    "url": {
+                      ".validate": "newData.isString() && newData.val().matches(/^(ht|f)tp(s?):\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*((0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\+&=%\\$#_]*)?$/)"
+                    }
+                  }
+                },
+                "imgs": {
+                  "$img":{
+                    ".validate": "newData.isString() && newData.val().matches(/^(ht|f)tp(s?):\\/\\/[0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*((0-9)*)*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,\\'\\/\\\\+&=%\\$#_]*)?$/)"
+                  }
+                }
+              }
+            }
+          }
+        }
+    }
+}

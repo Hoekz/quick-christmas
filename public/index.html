@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quick Christmas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <link href="css/style.css" rel="stylesheet"/>
+</head>
+<body ng-app="app">
+<div id="view" ng-controller="control">
+    <div id="navbar" ng-show="nav.$match(nav.home, nav.me, nav.ideas)">
+        <div id="me-btn" ng-click="nav(nav.me)" ng-hide="nav.$match(nav.me,nav.ideas)">
+            <img ng-src="{{myImage}}" ng-show="myImage"/>
+            <span>My Ideas</span>
+        </div>
+        <div id="home-btn" ng-click="nav(nav.home)" ng-show="nav.$match(nav.me,nav.ideas)">
+            <img src="img/home.png"/>
+            <span>Home</span>
+        </div>
+        <div id="search-btn" ng-click="nav(nav.search)">
+            <img src="img/search.png"/>
+            <span>Search</span>
+        </div>
+        <div id="new-btn" ng-click="nav(nav.new)">
+            <img src="img/new.png"/>
+            <span>New Idea</span>
+        </div>
+    </div>
+    <div id="search" ng-show="nav.$match(nav.search)">
+        <div>
+            <input type="text" ng-model="search"/>
+            <img src="img/quit.png" ng-click="search='';nav(nav.home)"/>
+        </div>
+    </div>
+    <div id="people" ng-show="nav.$match(nav.home, nav.search)">
+        <h1>Naughty</h1>
+        <div ng-repeat="person in people | filter:naughty"
+             class="person"
+             ng-class="{odd: $index % 2}"
+             ng-click="nav('/' + person.name + '/ideas')">
+            <img ng-src="{{person.profile}}" />
+            <div class="name">{{person.name}}</div>
+            <div class="count">{{ideaCount(person.ideas)}}</div>
+        </div>
+        <h1>Nice</h1>
+        <div ng-repeat="person in people | filter:nice"
+             class="person"
+             ng-class="{odd: $index % 2}"
+             ng-click="nav('/' + person.name + '/ideas')">
+            <img ng-src="{{person.profile}}" />
+            <div class="name">{{person.name}}</div>
+            <div class="count">{{ideaCount(person.ideas)}}</div>
+        </div>
+    </div>
+    <div id="ideas" ng-show="nav.$match(nav.ideas, nav.me)">
+        <div id="person">
+            <div id="status" ng-class="{naughty: isNaughty(person)}">{{isNaughty(person) ? 'Naughty!' : 'Nice!'}}</div>
+            <img ng-src="{{person.profile}}" />
+            <div>{{person.name}}</div>
+        </div>
+        <details ng-repeat="idea in person.ideas | filter:time" class="idea" ng-class="{odd: $index % 2}">
+            <summary class="title">{{idea.title}}</summary>
+            <img class="idea-image"
+                 ng-repeat="img in idea.imgs"
+                 ng-src="{{img}}">
+            <div class="description">{{idea.description}}</div>
+            <div class="idea-link"
+                 ng-repeat="link in idea.links"
+                 ng-click="nav.$open(link.url)">{{link.display || link.url}}</div>
+        </details>
+        <div id="show-more" ng-show="moreIdeas()">Show more ideas</div>
+    </div>
+    <div id="new" ng-show="nav.$match(nav.new)">
+        <div id="new-idea">
+            <label>Your Idea <input ng-model="idea.title"/></label>
+            <label>Description (Optional) <textarea ng-model="idea.description"></textarea></label>
+            <div ng-repeat="img in idea.imgs">
+                <img class="idea-image" ng-src="{{img}}">
+                <input ng-model="idea.imgs[$index]"/>
+            </div>
+            <button ng-click="idea.imgs.push('')">Add Image</button>
+            <div ng-repeat="link in idea.links" class="idea-link">
+                <input ng-model="link.url" placeholder="url"/>
+                <input ng-model="link.display" placeholder="label (optional)"/>
+            </div>
+            <button ng-click="idea.links.push({url: '', display: ''})">Add Link</button>
+        </div>
+        <div id="idea-bar">
+            <div id="create-btn" ng-click="createIdea(nav.me)">
+                <img src="img/accept.png"/>
+                <span>Submit</span>
+            </div>
+            <div id="cancel-btn" ng-click="nav(nav.home)">
+                <img src="img/quit.png"/>
+                <span>Cancel</span>
+            </div>
+            <div id="another-btn" ng-click="createIdea(nav.new)">
+                <img src="img/new.png"/>
+                <span>Submit + New Idea</span>
+            </div>
+        </div>
+    </div>
+    <div id="sign-up" ng-click="init()" ng-hide="authenticated"><div>Get Started</div></div>
+</div>
+<canvas id="snow"></canvas>
+<script src="js/angular.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.0.4/firebase.js"></script>
+<script src="https://cdn.firebase.com/libs/angularfire/2.1.0/angularfire.min.js"></script>
+<script src="js/app.js"></script>
+<script src="js/snow.js"></script>
+</body>
+</html>
