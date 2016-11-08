@@ -14,7 +14,19 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
     var ref = firebase.database().ref();
 
     var auth = $auth();
-    scope.authenticated = !!auth.$getAuth();
+
+    auth.$onAuthStateChanged(function(user){
+        scope.authenticated = !!user;
+
+        if(scope.authenticated){
+            scope.myImage = memory.get('me').profile;
+            people.grabAll(function(people){
+                scope.people = people;
+            });
+        }
+    });
+
+    scope.authenticated = false;
     scope.init = function(){
         auth.$signInWithPopup("google",{scope: 'email'}).then(function(authData){
             var myself = {
@@ -34,12 +46,6 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
             alert('There was an error logging you in.')
         });
     };
-    if(scope.authenticated){
-        scope.myImage = memory.get('me').profile;
-        people.grabAll(function(people){
-            scope.people = people;
-        });
-    }
 
     scope.search = "";
 
