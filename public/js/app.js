@@ -11,9 +11,9 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
 
     firebase.initializeApp(config);
 
-    var ref = firebase.database();
+    var ref = firebase.database().ref();
 
-    var auth = $auth(ref);
+    var auth = $auth();
     scope.authenticated = !!ref.getAuth();
     scope.init = function(){
         auth.$authWithOAuthPopup("google",{scope: 'email'}).then(function(authData){
