@@ -8,9 +8,9 @@
 </head>
 <body ng-app="app">
 <div id="view" ng-controller="control">
-    <div id="navbar" ng-show="nav.$match(nav.home, nav.me, nav.ideas)">
+    <div id="navbar" ng-show="nav.$match(nav.home, nav.me, nav.ideas, nav.newDep)">
         <div id="me-btn" ng-click="nav(nav.me)" ng-hide="nav.$match(nav.me,nav.ideas)">
-            <img ng-src="{{myImage}}" ng-show="myImage"/>
+            <img ng-src="{{me.profile}}" ng-show="myImage"/>
             <span>My Ideas</span>
         </div>
         <div id="home-btn" ng-click="nav(nav.home)" ng-show="nav.$match(nav.me,nav.ideas)">
@@ -57,9 +57,13 @@
             <div id="status" ng-class="{naughty: isNaughty(person)}">{{isNaughty(person) ? 'Naughty!' : 'Nice!'}}</div>
             <img ng-src="{{person.profile}}" />
             <div>{{person.name}}</div>
+            <div ng-click="nav(nav.newDep)" id="create-dep" ng-show="nav.$match(nav.me)">Create Dependent</div>
         </div>
         <details ng-repeat="idea in person.ideas | filter:time" class="idea" ng-class="{odd: $index % 2}">
-            <summary class="title">{{idea.title}}</summary>
+            <summary class="title">
+                {{idea.title}}
+                <img class="delete" src="img/quit.png" ng-click="delIdea($index)" ng-show="!!person.uid.match(me.uid)"/>
+            </summary>
             <img class="idea-image"
                  ng-repeat="img in idea.imgs"
                  ng-src="{{img}}">
@@ -84,9 +88,15 @@
                 <input ng-model="link.display" placeholder="label (optional)"/>
             </div>
             <button ng-click="idea.links.push({url: '', display: ''})">Add Link</button>
+            <div ng-show="dependents && dependents.length">
+                <label>Create as <select ng-model="as">
+                    <option value="{{me.uid}}" ng-selected>Myself</option>
+                    <option ng-repeat="dep in dependents" value="{{dep.uid}}">{{dep.name}}</option>
+                </select></label>
+            </div>
         </div>
         <div id="idea-bar">
-            <div id="create-btn" ng-click="createIdea(nav.me)">
+            <div id="create-btn" ng-click="createIdea(nav.me, as)">
                 <img src="img/accept.png"/>
                 <span>Submit</span>
             </div>
@@ -94,11 +104,15 @@
                 <img src="img/quit.png"/>
                 <span>Cancel</span>
             </div>
-            <div id="another-btn" ng-click="createIdea(nav.new)">
+            <div id="another-btn" ng-click="createIdea(nav.new, as)">
                 <img src="img/new.png"/>
                 <span>Submit + New Idea</span>
             </div>
         </div>
+    </div>
+    <div id="new-dep" ng-show="nav.$match(nav.newDep)">
+        <label>Name of Dependent <input ng-model="depName"/></label>
+        <button ng-click="createDependent(depName)">Create Dependent</button>
     </div>
     <div id="sign-up" ng-click="init()" ng-hide="authenticated"><div>Get Started</div></div>
 </div>

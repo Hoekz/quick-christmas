@@ -2,6 +2,7 @@ var app = angular.module('app',['firebase']);
 
 app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',function(scope,$auth,nav,people,memory){
     scope.nav = nav;
+    scope.dependents = null;
 
     var config = {
         apiKey: "AIzaSyAkBsN_Ne7RKopQcSx3LOQkXcl50VQsLho",
@@ -19,9 +20,20 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
         scope.authenticated = !!user;
 
         if(scope.authenticated){
-            scope.myImage = memory.get('me').profile;
+            scope.me = memory.get('me');
+            scope.dependents = memory.get('dependents') || null;
+            scope.as = scope.me.uid;
             people.grabAll(function(people){
                 scope.people = people;
+                scope.dependents = [];
+
+                angular.forEach(people, function(person){
+                    if(!!person.uid.match(scope.me.uid) && person.uid != scope.me.uid){
+                        scope.dependents.push(person);
+                    }
+                });
+
+                memory.set('dependents', scope.dependents);
             });
         }
     });
@@ -42,6 +54,7 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
             people.grabAll(function(people){
                 scope.people = people;
             });
+            scope.me = myself;
         }).catch(function(error) {
             alert('There was an error logging you in.')
         });
@@ -59,27 +72,58 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
         if(!count) return "no ideas";
         return count + " idea" + ((count==1)?"":"s");
     };
+
     scope.isNaughty = function(person){
         return person && scope.ideaCount(person.ideas) == "no ideas";
     };
+
     scope.naughty = function(item){
         return item.name.match(scope.search) && scope.ideaCount(item.ideas) == "no ideas";
     };
+
     scope.nice = function(item){
         return item.name.match(scope.search) && scope.ideaCount(item.ideas) !== "no ideas";
     };
 
-    scope.createIdea = function(loc){
-        people.addIdea(memory.get('me').uid, scope.idea, function(){
+    scope.createIdea = function(loc, as){
+        people.addIdea(as || memory.get('me').uid, scope.idea, function(res){
             scope.idea = {
                 title: '',
                 description: '',
                 imgs: [],
                 links: [],
-                time: Firebase.ServerValue.TIMESTAMP
+                time: firebase.database.ServerValue.TIMESTAMP
             };
             nav(loc);
         });
+    };
+
+    scope.delIdea = function(index){
+        people.deleteIdea(scope.person.uid, index, function(){
+            scope.person.ideas.splice(index, 1);
+        });
+    };
+
+    scope.createDependent = function(name){
+        var dependent = {
+            name: name,
+            profile: scope.me.profile,
+            email: scope.me.email,
+            uid: scope.me.uid + ' ' + name
+        };
+
+        people.addDependent(dependent.uid, dependent);
+
+        var deps = memory.get('dependents');
+        if(!deps) deps = [];
+        deps.push(dependent);
+        memory.set('dependents', deps);
+        scope.dependents = deps;
+        scope.depName = '';
+        setTimeout(function(){
+            console.log(scope.dependents);
+            nav('/' + name + '/ideas');
+        }, 1000);
     };
 
     nav.$route('/', 'home', function(){
@@ -89,6 +133,7 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
             });
         }
     });
+
     nav.$route('/search', 'search', function(){
         if(scope.authenticated){
             people.grabAll(function(people){
@@ -96,30 +141,36 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
             });
         }
     });
+
     nav.$route('/:person/ideas', 'ideas', function(params){
         people.grabAll(function(){
             scope.person = people.get(params.person);
         });
     });
+
     nav.$route('/me','me', function(){
         people.grabAll(function(){
             scope.person = people.get(memory.get('me').name);
         });
     });
+
     nav.$route('/new', 'new', function(){
         scope.idea = {
             title: '',
             description: '',
             imgs: [],
             links: [],
-            time: Firebase.ServerValue.TIMESTAMP
+            time: firebase.database.ServerValue.TIMESTAMP
         };
     });
+
+    nav.$route('/new-dependent', 'newDep', function(){
+        scope.depName = '';
+    });
+
     if(location.hash.length < 2) nav('/');
 
-    window.onhashchange = function(){
-        scope.$digest();
-    };
+    window.onhashchange = function(){scope.$digest();};
 }]);
 
 app.factory('nav', ['$timeout', function($timeout){
@@ -251,7 +302,8 @@ app.factory('people', ['$firebaseArray', function($Array){
                     name: person.name,
                     profile: person.profile,
                     email: person.email,
-                    ideas: toArray(person.ideas)
+                    ideas: toArray(person.ideas),
+                    uid: person.uid
                 };
             }else{
                 people = $Array(ref);
@@ -262,11 +314,22 @@ app.factory('people', ['$firebaseArray', function($Array){
             if(!ref) ref = firebase.database().ref().child('members');
             ref.child(uid).update(person);
         },
+        addDependent: function(uid, dependent){
+            if(!ref) ref = firebase.database().ref().child('members');
+            ref.child(uid).update(dependent);
+        },
         addIdea: function(uid, idea, callback){
             if(!ref) ref = firebase.database().ref().child('members');
             idea = angular.copy(idea);
-            idea.time = Firebase.ServerValue.TIMESTAMP;
+            idea.time = firebase.database.ServerValue.TIMESTAMP;
             ref.child(uid).child('ideas').push(idea, callback);
+        },
+        deleteIdea: function(uid, index, callback){
+            if(!ref) ref = firebase.database().ref().child('members');
+            var ideas = $Array(ref.child(uid).child('ideas'));
+            ideas.$loaded().then(function(){
+                return ideas.$remove(index);
+            }).then(callback);
         }
     };
 }]);
