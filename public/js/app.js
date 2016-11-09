@@ -41,9 +41,11 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
     scope.authenticated = false;
     scope.init = function(){
         auth.$signInWithPopup("google",{scope: 'email'}).then(function(authData){
+            console.log(authData);
+            var num = Math.floor(Math.random() * 5);
             var myself = {
                 name: authData.user.displayName,
-                profile: authData.user.photoURL,
+                profile: authData.user.photoURL || "/img/defaults/" + num + ".png",
                 email: authData.user.email,
                 uid: authData.user.uid
             };
