@@ -44,7 +44,7 @@ function(scope,$auth,nav,people,memory,nameFromEmail){
         auth.$signInWithPopup("google",{scope: 'email'}).then(function(authData){
             var num = Math.floor(Math.random() * 5);
             var myself = {
-                name: authData.user.displayName || nameFromEmail[authData.user.email],
+                name: authData.user.displayName || nameFromEmail[authData.user.email] || prompt("Please enter your full name"),
                 profile: authData.user.photoURL || "/img/defaults/" + num + ".png",
                 email: authData.user.email,
                 uid: authData.user.uid
