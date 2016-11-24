@@ -1,6 +1,7 @@
 var app = angular.module('app',['firebase']);
 
-app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',function(scope,$auth,nav,people,memory){
+app.controller('control', ['$scope','$firebaseAuth','nav','people','memory','nameFromEmail',
+function(scope,$auth,nav,people,memory,nameFromEmail){
     scope.nav = nav;
     scope.dependents = null;
 
@@ -41,16 +42,18 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
     scope.authenticated = false;
     scope.init = function(){
         auth.$signInWithPopup("google",{scope: 'email'}).then(function(authData){
-            console.log(authData);
             var num = Math.floor(Math.random() * 5);
             var myself = {
-                name: authData.user.displayName,
+                name: authData.user.displayName || nameFromEmail[authData.user.email],
                 profile: authData.user.photoURL || "/img/defaults/" + num + ".png",
                 email: authData.user.email,
                 uid: authData.user.uid
             };
+            if(!myself.name || !myself.email){
+                return alert('You do not have permission to access this application.');
+            }
             memory.set('me', myself);
-            people.add(authData.user.uid, myself);
+            people.add(myself.uid, myself);
             scope.myImage = memory.get('me').profile;
             scope.authenticated = true;
             people.grabAll(function(people){
@@ -58,7 +61,7 @@ app.controller('control', ['$scope','$firebaseAuth','nav','people','memory',func
             });
             scope.me = myself;
         }).catch(function(error) {
-            alert('There was an error logging you in.')
+            alert('There was an error logging you in.');
         });
     };
 
@@ -344,5 +347,35 @@ app.factory('memory', function(){
         get: function(key){
             return JSON.parse(localStorage.getItem(key));
         }
+    };
+});
+
+app.factory('nameFromEmail', function(){
+    return {
+        "jquick19@gmail.com": "Jimi Quick",
+        "jr_q_jr@yahoo.com": "John Quick",
+        "ktfulton6@gmail.com": "Katy Fulton",
+        "eeorye44@gmail.com": "Kim Pieper",
+        "Kristin.hoekzema@gmail.com": "Kristin Hoekzema",
+        "mmquick@aol.com": "Mary Quick",
+        "michael.e.quick@gmail.com": "Michael Quick",
+        "vharpring@juno.com": "Vicki Harpring",
+        "andi.harpring@gmail.com": "Andi Harpring",
+        "andrew.s.hoekzema@gmail.com": "Andrew Hoekzema",
+        "ashleyp08@hotmail.com": "Ashley Pieper",
+        "bhoek4590@gmail.com": "Bethany Hoekzema",
+        "erin.eq@gmail.com": "Erin Quick",
+        "efquick12@aol.com": "Ethan Quick",
+        "hoxema@gmail.com": "Hannah Hoekzema",
+        "heather.e.fulton@gmail.com": "Heather Fulton",
+        "jdog314159@gmail.com": "James Hoekzema",
+        "jharpring@gmail.com": "Jenni Harpring",
+        "kellyquick@outlook.com": "Kelly Quick",
+        "lfulton14@gmail.com": "Laura Fulton",
+        "melfel17@gmail.com": "Melissa Fulton",
+        "nathan.fulton@gmail.com": "Nathan Fulton",
+        "nora.quick@aol.com": "Nora Quick",
+        "sarah.zerbee@gmail.com": "Sarah Zerbee",
+        "scratt_007@hotmail.com": "Schelly Pieper"
     };
 });

@@ -12,7 +12,7 @@
           "$person": {
             ".write": "(!data.exists() && auth !== null) || $person.beginsWith(auth.uid)",
             ".read": "auth !== null",
-            ".validate": "newData.hasChildren(['profile','name','email']) && root.child('allowed').hasChild(newData.child('name').val())",
+            ".validate": "newData.hasChildren(['profile','name','email'])",
             "ideas": {
               "$idea": {
                 ".validate": "newData.hasChildren(['time','title','description'])",

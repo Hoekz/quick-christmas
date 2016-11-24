@@ -1,0 +1,135 @@
+{
+  "allowed" : {
+    "Mike Fulton": "",
+    "Katy Fulton": "",
+    "Heather Fulton": "",
+    "Laura Fulton": "",
+    "Melissa Fulton": "",
+    "Nathan Fulton": "",
+    "Andi Harpring": "",
+    "David Harpring": "",
+    "Jenni Harpring": "",
+    "Vicki Harpring": "",
+    "Andrew Hoekzema": "",
+    "Bethany Hoekzema": "",
+    "Grand Hoekzema": "",
+    "Hannah Hoekzema": "",
+    "James Hoekzema": "",
+    "Kristin Hoekzema": "",
+    "Matthew Hoekzema": "",
+    "Violet Hoekzema": "",
+    "Ashley Pieper": "",
+    "Kim Pieper": "",
+    "Schelly Pieper": "",
+    "Jimi Quick": "",
+    "John Quick": "",
+    "Mary Quick": "",
+    "Michael Quick": "",
+    "Ethan Quick": "",
+    "Erin Quick": "",
+    "Kelly Quick": "",
+    "Nora Quick": "",
+    "Sarah Zerbee": ""
+  },
+  "members" : {
+    "0hsTca53jVUxVQYkhDifubB8aD42" : {
+      "email" : "jdog314159@gmail.com",
+      "ideas" : {
+        "-KX87xSQLrytFFRP1Hc0" : {
+          "description" : "Please report any and all problems to me. There's still some areas that haven't been fully tested and by no means was I able to account for every edge case. Any problem can point to something bigger, so speak up!",
+          "time" : 1479769577364,
+          "title" : "A Working Website"
+        }
+      },
+      "name" : "James Hoekzema",
+      "profile" : "https://lh3.googleusercontent.com/-5ee6fxEy8xQ/AAAAAAAAAAI/AAAAAAAAAMk/PxiNHBLwrAM/s96-c/photo.jpg",
+      "uid" : "0hsTca53jVUxVQYkhDifubB8aD42"
+    },
+    "53YUneGJgNVPUJRumFnRVolE8Bc2" : {
+      "email" : "hoekgs@gmail.com",
+      "ideas" : {
+        "-KWAgHSRqeTdgZM-Vn1k" : {
+          "description" : "An apple device that requires frequent updates",
+          "time" : 1478738651130,
+          "title" : "New iPad"
+        }
+      },
+      "name" : "Grant Hoekzema",
+      "profile" : "/img/defaults/0.png",
+      "uid" : "53YUneGJgNVPUJRumFnRVolE8Bc2"
+    },
+    "H2iR5OCUVzXGqndVTS7Wh33Tulm1" : {
+      "email" : "hoxema@gmail.com",
+      "ideas" : {
+        "-KX8AL0gVycZBol4Bwpa" : {
+          "description" : "No brand preference--they're just different types of ink! Sumi ink is black, Walnut ink is a sepia (if that helps).",
+          "time" : 1479770202319,
+          "title" : "Sumi ink or Walnut ink"
+        },
+        "-KX8AY5MEllaVr88DmjH" : {
+          "description" : "Walmart, HyVee, Lucky's, Starbucks, Amazon",
+          "time" : 1479770255873,
+          "title" : "Gift cards"
+        },
+        "-KX8AbrottDJLjY2t_cM" : {
+          "description" : "DVD or Blu-Ray",
+          "time" : 1479770275408,
+          "title" : "Princess Mononoke"
+        },
+        "-KX8AgiQCyC9dQ7mnp4y" : {
+          "description" : "Only the softest please",
+          "time" : 1479770295289,
+          "title" : "Very soft blanket or pillow"
+        }
+      },
+      "name" : "Hannah Hoekzema",
+      "profile" : "https://lh5.googleusercontent.com/-UCGgnSnDEQQ/AAAAAAAAAAI/AAAAAAAAAD8/eCtnowfiaus/s96-c/photo.jpg",
+      "uid" : "H2iR5OCUVzXGqndVTS7Wh33Tulm1"
+    },
+    "XMr7yJjinmgxuYzodyJwVzr4Hn33" : {
+      "email" : "sbpitcher101@gmail.com",
+      "ideas" : {
+        "-KWht0jkxWZ8eXnM_npy" : {
+          "description" : "",
+          "links" : [ {
+            "display" : "",
+            "url" : "https://www.amazon.com/gp/product/1846014719/ref=s9_simh_hd_bw_b6_p14_d55_i1?pf_rd_m=ATVPDKIKX0DER&pf_rd_s=merchandised-search-4&pf_rd_r=G8JGPBH0W7VZ8KKSHFAT&pf_rd_t=101&pf_rd_p=5b9ffbc6-6488-5a85-85bb-c8da14b84607&pf_rd_i=6"
+          } ],
+          "time" : 1479312415787,
+          "title" : "The Hungry Student Cookbook"
+        },
+        "-KWhum9eBFpUPi0rSnlu" : {
+          "description" : "",
+          "time" : 1479312876277,
+          "title" : "Meat Thermometer"
+        },
+        "-KWhzvn0c03TyNMS4Fbg" : {
+          "description" : "Aldi; Bread co; Starbucks",
+          "time" : 1479314226435,
+          "title" : "Gift Cards"
+        },
+        "-KWi-J2oDKis4kGsC6MH" : {
+          "description" : "James and I are looking to get a puppy in the next year and would love reading material to help prepare :)",
+          "time" : 1479314325820,
+          "title" : "Dog/puppy books for first time owner"
+        }
+      },
+      "name" : "Violet Kouzes",
+      "profile" : "/img/defaults/1.png",
+      "uid" : "XMr7yJjinmgxuYzodyJwVzr4Hn33"
+    },
+    "xkcRHKj1UKNunKr0TGWgnzaie8j1" : {
+      "email" : "mhoekz@gmail.com",
+      "ideas" : {
+        "-KX2AZ4uATXNYBP6hwNx" : {
+          "description" : "preferably plaid",
+          "time" : 1479669596640,
+          "title" : "Scarf"
+        }
+      },
+      "name" : "Matthew Hoekzema",
+      "profile" : "/img/defaults/3.png",
+      "uid" : "xkcRHKj1UKNunKr0TGWgnzaie8j1"
+    }
+  }
+}
