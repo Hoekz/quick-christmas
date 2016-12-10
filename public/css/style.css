@@ -93,7 +93,7 @@ html, body {
     box-shadow: 0 0 15px 15px rgba(0,0,0,0.5);
     margin-bottom: 2rem;
 }
-#new-dep{
+#new-dep {
     padding: 4rem 0;
 }
 
@@ -164,7 +164,7 @@ details img.delete {
     right: 0.5rem;
     cursor: pointer;
 }
-#create-dep {
+#create-dep, #poke-person {
     position: absolute;
     right: 1rem;
     bottom: 1rem;
@@ -174,6 +174,7 @@ details img.delete {
     border: 2px solid white;
     cursor: pointer;
     font-size: 1rem;
+    z-index: 99;
 }
 
 .idea .description{

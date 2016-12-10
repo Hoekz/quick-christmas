@@ -58,6 +58,7 @@
             <img ng-src="{{person.profile}}" />
             <div>{{person.name}}</div>
             <div ng-click="nav(nav.newDep)" id="create-dep" ng-show="nav.$match(nav.me)">Create Dependent</div>
+            <div ng-click="pokePerson(person)" id="poke-person" ng-show="nav.$match(nav.ideas)">Poke!</div>
         </div>
         <details ng-repeat="idea in person.ideas | filter:time" class="idea" ng-class="{odd: $index % 2}">
             <summary class="title">

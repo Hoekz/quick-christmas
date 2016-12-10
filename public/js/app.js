@@ -131,6 +131,14 @@ function(scope,$auth,nav,people,memory,nameFromEmail){
         }, 1000);
     };
 
+    scope.pokePerson = function(person){
+        ref.child('pokes').push({
+            name: person.name,
+            email: person.email
+        });
+        alert('This person will receive an email.');
+    };
+
     nav.$route('/', 'home', function(){
         if(scope.authenticated){
             people.grabAll(function(people){

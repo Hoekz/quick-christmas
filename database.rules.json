@@ -6,6 +6,10 @@
           ".read": "auth !== null",
           ".write": false
         },
+        "pokes": {
+          ".read": "auth !== null",
+          ".write": "auth !== null"
+        },
         "members": {
           ".read": "auth !== null",
           ".write": "auth !== null",
