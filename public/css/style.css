@@ -148,10 +148,29 @@ html, body {
     margin: 1em;
 }
 details.idea{
+    position: relative;
+    top: -2px;
     padding: 0.5em;
     text-align: center;
     background: #86200A;
+    border-top: 2px solid white;
     border-bottom: 2px solid white;
+}
+details.idea.old {
+    background: #5F1707;
+    position: relative;
+    margin-top: -2px;
+    top: 2.5rem;
+}
+details.idea.old.first-old::before {
+    position: absolute;
+    content: "Old Ideas";
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    display: block;
+    width: 100%;
+    top: -2rem;
 }
 summary.title{
     text-align: left;

@@ -60,7 +60,9 @@
             <div ng-click="nav(nav.newDep)" id="create-dep" ng-show="nav.$match(nav.me)">Create Dependent</div>
             <div ng-click="pokePerson(person)" id="poke-person" ng-show="nav.$match(nav.ideas)">Poke!</div>
         </div>
-        <details ng-repeat="idea in person.ideas | filter:time" class="idea" ng-class="{odd: $index % 2}">
+        <details ng-repeat="idea in person.ideas | filter:time | orderBy:time:true as list"
+                 class="idea"
+                 ng-class="{ old: isOldIdea(idea.time), 'first-old': !isOldIdea(list[$index - 1].time) }">
             <summary class="title">
                 {{idea.title}}
                 <img class="delete" src="img/quit.png" ng-click="delIdea($index)" ng-show="!!person.uid.match(me.uid)"/>

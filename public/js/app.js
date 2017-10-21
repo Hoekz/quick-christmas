@@ -6,9 +6,9 @@ function(scope,$auth,nav,people,memory,nameFromEmail){
     scope.dependents = null;
 
     var config = {
-        apiKey: "AIzaSyAkBsN_Ne7RKopQcSx3LOQkXcl50VQsLho",
-        authDomain: "quick-christmas-c1eef.firebaseapp.com",
-        databaseURL: "https://quick-christmas-c1eef.firebaseio.com/"
+        apiKey: 'AIzaSyAkBsN_Ne7RKopQcSx3LOQkXcl50VQsLho',
+        authDomain: 'quick-christmas-c1eef.firebaseapp.com',
+        databaseURL: 'https://quick-christmas-c1eef.firebaseio.com/'
     };
 
     firebase.initializeApp(config);
@@ -41,11 +41,11 @@ function(scope,$auth,nav,people,memory,nameFromEmail){
 
     scope.authenticated = false;
     scope.init = function(){
-        auth.$signInWithPopup("google",{scope: 'email'}).then(function(authData){
+        auth.$signInWithPopup('google',{scope: 'email'}).then(function(authData){
             var num = Math.floor(Math.random() * 5);
             var myself = {
-                name: authData.user.displayName || nameFromEmail[authData.user.email] || prompt("Please enter your full name"),
-                profile: authData.user.photoURL || "/img/defaults/" + num + ".png",
+                name: authData.user.displayName || nameFromEmail[authData.user.email] || prompt('Please enter your full name'),
+                profile: authData.user.photoURL || '/img/defaults/' + num + '.png',
                 email: authData.user.email,
                 uid: authData.user.uid
             };
@@ -65,29 +65,33 @@ function(scope,$auth,nav,people,memory,nameFromEmail){
         });
     };
 
-    scope.search = "";
+    scope.search = '';
+    
+    scope.isOldIdea = function(time){
+        var year = new Date().getYear() + 1900;
+        return time < new Date(year, 0);
+    };
 
     scope.ideaCount = function(ideas){
-        if(!ideas) return "no ideas";
-        var year = new Date().getYear() + 1900;
+        if(!ideas) return 'no ideas';
         var count = 0;
         angular.forEach(ideas, function(idea){
-            if(idea.time > new Date(year,0)) count++;
+            if(!scope.isOldIdea(idea.time)) count++;
         });
-        if(!count) return "no ideas";
-        return count + " idea" + ((count==1)?"":"s");
+        if(!count) return 'no ideas';
+        return count + ' idea' + ((count === 1) ? '': 's');
     };
 
     scope.isNaughty = function(person){
-        return person && scope.ideaCount(person.ideas) == "no ideas";
+        return person && scope.ideaCount(person.ideas) === 'no ideas';
     };
 
     scope.naughty = function(item){
-        return item.name.match(scope.search) && scope.ideaCount(item.ideas) == "no ideas";
+        return item.name.match(scope.search) && scope.ideaCount(item.ideas) === 'no ideas';
     };
 
     scope.nice = function(item){
-        return item.name.match(scope.search) && scope.ideaCount(item.ideas) !== "no ideas";
+        return item.name.match(scope.search) && scope.ideaCount(item.ideas) !== 'no ideas';
     };
 
     scope.createIdea = function(loc, as){
@@ -202,14 +206,14 @@ app.factory('nav', ['$timeout', function($timeout){
     };
 
     var adjust = function(pattern, label){
-        if(pattern.indexOf(':') == -1){
+        if(pattern.indexOf(':') === -1){
             return pattern;
         }else{
             lookup[label] = [];
             pattern = pattern.split('/').map(function(sub){
-                if(sub[0] == ':'){
+                if(sub[0] === ':'){
                     lookup[label].push(sub.substr(1));
-                    return "([a-zA-z0-9- ]+)";
+                    return '([a-zA-z0-9- ]+)';
                 }else{
                     return sub;
                 }
@@ -222,8 +226,8 @@ app.factory('nav', ['$timeout', function($timeout){
         if(!loc) return false;
         loc = decodeURI(loc);
         for(var label in nav){
-            if(nav.hasOwnProperty(label) && label[0] != '$'){
-                if((loc.match(nav[label]) && nav[label] instanceof RegExp) || loc == nav[label]){
+            if(nav.hasOwnProperty(label) && label[0] !== '$'){
+                if((loc.match(nav[label]) && nav[label] instanceof RegExp) || loc === nav[label]){
                     location.hash = loc;
                     parse(loc, nav[label], label);
                     if(response[label]){
@@ -237,9 +241,9 @@ app.factory('nav', ['$timeout', function($timeout){
     };
 
     nav.$route = function(pattern, label, on){
-        if(typeof pattern == "string"){
+        if(typeof pattern === 'string'){
             nav[label] = adjust(pattern, label);
-            if(typeof on === "function"){
+            if(typeof on === 'function'){
                 response[label] = on;
             }
         }
@@ -249,7 +253,7 @@ app.factory('nav', ['$timeout', function($timeout){
         var patterns = arguments;
         for(var i = 0; i < patterns.length; i++){
             var loc = decodeURI(location.hash.substr(1));
-            if((loc.match(patterns[i]) && patterns[i] instanceof RegExp) || loc == patterns[i]){
+            if((loc.match(patterns[i]) && patterns[i] instanceof RegExp) || loc === patterns[i]){
                 return true;
             }
         }
@@ -306,7 +310,7 @@ app.factory('people', ['$firebaseArray', function($Array){
             if(people){
                 var person = null;
                 angular.forEach(people, function(p){
-                    if(p.name == name){
+                    if(p.name === name){
                         person = p;
                     }
                 });
@@ -360,30 +364,30 @@ app.factory('memory', function(){
 
 app.factory('nameFromEmail', function(){
     return {
-        "jquick19@gmail.com": "Jimi Quick",
-        "jr_q_jr@yahoo.com": "John Quick",
-        "ktfulton6@gmail.com": "Katy Fulton",
-        "eeorye44@gmail.com": "Kim Pieper",
-        "Kristin.hoekzema@gmail.com": "Kristin Hoekzema",
-        "mmquick@aol.com": "Mary Quick",
-        "michael.e.quick@gmail.com": "Michael Quick",
-        "vharpring@juno.com": "Vicki Harpring",
-        "andi.harpring@gmail.com": "Andi Harpring",
-        "andrew.s.hoekzema@gmail.com": "Andrew Hoekzema",
-        "ashleyp08@hotmail.com": "Ashley Pieper",
-        "bhoek4590@gmail.com": "Bethany Hoekzema",
-        "erin.eq@gmail.com": "Erin Quick",
-        "efquick12@aol.com": "Ethan Quick",
-        "hoxema@gmail.com": "Hannah Hoekzema",
-        "heather.e.fulton@gmail.com": "Heather Fulton",
-        "jdog314159@gmail.com": "James Hoekzema",
-        "jharpring@gmail.com": "Jenni Harpring",
-        "kellyquick@outlook.com": "Kelly Quick",
-        "lfulton14@gmail.com": "Laura Fulton",
-        "melfel17@gmail.com": "Melissa Fulton",
-        "nathan.fulton@gmail.com": "Nathan Fulton",
-        "nora.quick@aol.com": "Nora Quick",
-        "sarah.zerbee@gmail.com": "Sarah Zerbee",
-        "scratt_007@hotmail.com": "Schelly Pieper"
+        'jquick19@gmail.com': 'Jimi Quick',
+        'jr_q_jr@yahoo.com': 'John Quick',
+        'ktfulton6@gmail.com': 'Katy Fulton',
+        'eeorye44@gmail.com': 'Kim Pieper',
+        'Kristin.hoekzema@gmail.com': 'Kristin Hoekzema',
+        'mmquick@aol.com': 'Mary Quick',
+        'michael.e.quick@gmail.com': 'Michael Quick',
+        'vharpring@juno.com': 'Vicki Harpring',
+        'andi.harpring@gmail.com': 'Andi Harpring',
+        'andrew.s.hoekzema@gmail.com': 'Andrew Hoekzema',
+        'ashleyp08@hotmail.com': 'Ashley Pieper',
+        'bhoek4590@gmail.com': 'Bethany Hoekzema',
+        'erin.eq@gmail.com': 'Erin Quick',
+        'efquick12@aol.com': 'Ethan Quick',
+        'hoxema@gmail.com': 'Hannah Hoekzema',
+        'heather.e.fulton@gmail.com': 'Heather Fulton',
+        'jdog314159@gmail.com': 'James Hoekzema',
+        'jharpring@gmail.com': 'Jenni Harpring',
+        'kellyquick@outlook.com': 'Kelly Quick',
+        'lfulton14@gmail.com': 'Laura Fulton',
+        'melfel17@gmail.com': 'Melissa Fulton',
+        'nathan.fulton@gmail.com': 'Nathan Fulton',
+        'nora.quick@aol.com': 'Nora Quick',
+        'sarah.zerbee@gmail.com': 'Sarah Zerbee',
+        'scratt_007@hotmail.com': 'Schelly Pieper'
     };
 });
