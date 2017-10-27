@@ -391,3 +391,16 @@ app.factory('nameFromEmail', function(){
         'scratt_007@hotmail.com': 'Schelly Pieper'
     };
 });
+
+app.factory('$exceptionHandler', ['$log', function($log) {
+    return function myExceptionHandler(err, cause) {
+        firebase.database().ref()
+            .child('errors')
+            .child((new Date()).getTime())
+            .update({
+                message: err.message,
+                stack: err.stack
+            });
+        $log.warn(err, cause);
+    };
+}]);
