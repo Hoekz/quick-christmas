@@ -6,7 +6,7 @@ app.controller('control', ['$scope', '$firebaseAuth', 'nav', 'people', 'memory',
 
   const config = {
     apiKey: 'AIzaSyARYtvFj0Hy5Ki2Xcrvs-dqoBs5yu_GD0I',
-    authDomain: location.host,
+    authDomain: 'quick-christmas-90990.firebaseapp.com',
     databaseURL: 'https://quick-christmas-90990.firebaseio.com/'
   };
 
@@ -21,8 +21,26 @@ app.controller('control', ['$scope', '$firebaseAuth', 'nav', 'people', 'memory',
 
     if (scope.authenticated) {
       scope.me = memory.get('me');
+
+      if (!scope.me) {
+        const num = Math.floor(Math.random() * 5);
+        const myself = {
+          name: user.displayName || prompt('Please enter your full name'),
+          profile: user.photoURL || '/img/defaults/' + num + '.png',
+          email: user.email,
+          uid: user.uid,
+        };
+        if (!myself.name || !myself.email) {
+          return alert('You do not have permission to access this application.');
+        }
+        memory.set('me', myself);
+        people.add(myself.uid, myself);
+        scope.me = myself;
+      }
+
       scope.dependents = memory.get('dependents') || null;
       scope.as = scope.me.uid;
+      scope.myImage = scope.me.profile;
       people.grabAll((people) => {
         scope.people = people;
         scope.dependents = people.filter((person) => person?.uid?.match(scope.as) && person?.uid !== scope.as);
@@ -33,26 +51,9 @@ app.controller('control', ['$scope', '$firebaseAuth', 'nav', 'people', 'memory',
 
   scope.authenticated = false;
   scope.init = () => {
-    auth.$signInWithPopup('google', { scope: 'email' }).then((authData) => {
-      const num = Math.floor(Math.random() * 5);
-      const myself = {
-        name: authData.user.displayName || prompt('Please enter your full name'),
-        profile: authData.user.photoURL || '/img/defaults/' + num + '.png',
-        email: authData.user.email,
-        uid: authData.user.uid,
-      };
-      if (!myself.name || !myself.email) {
-        return alert('You do not have permission to access this application.');
-      }
-      memory.set('me', myself);
-      people.add(myself.uid, myself);
-      scope.myImage = memory.get('me').profile;
-      scope.authenticated = true;
-      people.grabAll((people) => scope.people = people);
-      scope.me = myself;
-    }).catch((error) => {
-      alert('There was an error logging you in.');
-    });
+    auth.$signInWithRedirect('google', { scope: 'email' })
+      .then(() => scope.authenticated = true)
+      .catch((error) => alert('There was an error logging you in.'));
   };
 
   scope.search = '';
@@ -60,7 +61,7 @@ app.controller('control', ['$scope', '$firebaseAuth', 'nav', 'people', 'memory',
   scope.isOldIdea = (time) => time < new Date(new Date().getYear() + 1900, 0);
 
   scope.ideaCount = (ideas) => {
-    const count = (ideas || []).filter(idea => scope.isOldIdea(idea.time)).length;
+    const count = Object.values(ideas || {}).filter(idea => !scope.isOldIdea(idea.time)).length;
     return count ? (count + ' idea' + ((count === 1) ? '' : 's')) : 'no ideas';
   };
 
@@ -229,7 +230,7 @@ app.factory('people', ['$firebaseArray', ($Array) => {
   let ref = null;
   let people = null;
 
-  const toArray = (ideas) => Object.entries(ideas).map(([$key, value]) => ({ ...value, $key }));
+  const toArray = (ideas) => Object.entries(ideas || {}).map(([$key, value]) => ({ ...value, $key }));
 
   return {
     grabAll(callback) {

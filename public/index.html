@@ -9,22 +9,22 @@
 <body ng-app="app">
 <div id="view" ng-controller="control">
     <div id="navbar" ng-show="nav.$match(nav.home, nav.me, nav.ideas, nav.newDep)">
-        <div id="me-btn" ng-click="nav(nav.me)" ng-hide="nav.$match(nav.me,nav.ideas)">
+        <button id="me-btn" ng-click="nav(nav.me)" ng-hide="nav.$match(nav.me, nav.ideas)">
             <img ng-src="{{me.profile}}" ng-show="myImage"/>
             <span>My Ideas</span>
-        </div>
-        <div id="home-btn" ng-click="nav(nav.home)" ng-show="nav.$match(nav.me,nav.ideas)">
+        </button>
+        <button id="home-btn" ng-click="nav(nav.home)" ng-show="nav.$match(nav.me, nav.ideas)">
             <img src="img/home.png"/>
             <span>Home</span>
-        </div>
-        <div id="search-btn" ng-click="nav(nav.search)">
+        </button>
+        <button id="search-btn" ng-click="nav(nav.search)">
             <img src="img/search.png"/>
             <span>Search</span>
-        </div>
-        <div id="new-btn" ng-click="nav(nav.new)">
+        </button>
+        <button id="new-btn" ng-click="nav(nav.new)">
             <img src="img/new.png"/>
             <span>New Idea</span>
-        </div>
+        </button>
     </div>
     <div id="search" ng-show="nav.$match(nav.search)">
         <div>
@@ -34,31 +34,31 @@
     </div>
     <div id="people" ng-show="nav.$match(nav.home, nav.search)">
         <h1>Naughty</h1>
-        <div ng-repeat="person in people | filter:naughty"
+        <button ng-repeat="person in people | filter:naughty"
              class="person"
              ng-class="{odd: $index % 2}"
              ng-click="nav('/' + person.name + '/ideas')">
             <img ng-src="{{person.profile}}" />
             <div class="name">{{person.name}}</div>
             <div class="count">{{ideaCount(person.ideas)}}</div>
-        </div>
+        </button>
         <h1>Nice</h1>
-        <div ng-repeat="person in people | filter:nice"
+        <button ng-repeat="person in people | filter:nice"
              class="person"
              ng-class="{odd: $index % 2}"
              ng-click="nav('/' + person.name + '/ideas')">
             <img ng-src="{{person.profile}}" />
             <div class="name">{{person.name}}</div>
             <div class="count">{{ideaCount(person.ideas)}}</div>
-        </div>
+        </button>
     </div>
     <div id="ideas" ng-show="nav.$match(nav.ideas, nav.me)">
         <div id="person">
             <div id="status" ng-class="{naughty: isNaughty(person)}">{{isNaughty(person) ? 'Naughty!' : 'Nice!'}}</div>
             <img ng-src="{{person.profile}}" />
             <div>{{person.name}}</div>
-            <div ng-click="nav(nav.newDep)" id="create-dep" ng-show="nav.$match(nav.me)">Create Dependent</div>
-            <div ng-click="pokePerson(person)" id="poke-person" ng-show="nav.$match(nav.ideas)">Poke!</div>
+            <button ng-click="nav(nav.newDep)" id="create-dep" ng-show="nav.$match(nav.me)">Create Dependent</button>
+            <button ng-click="pokePerson(person)" id="poke-person" ng-show="nav.$match(nav.ideas)">Poke!</button>
         </div>
         <details ng-repeat="idea in person.ideas | filter:time | orderBy:time:true as list"
                  class="idea"
@@ -71,11 +71,10 @@
                  ng-repeat="img in idea.imgs"
                  ng-src="{{img}}">
             <div class="description">{{idea.description}}</div>
-            <div class="idea-link"
+            <button class="idea-link"
                  ng-repeat="link in idea.links"
-                 ng-click="nav.$open(link.url)">{{link.display || link.url}}</div>
+                 ng-click="nav.$open(link.url)">{{link.display || link.url}}</button>
         </details>
-        <div id="show-more" ng-show="moreIdeas()">Show more ideas</div>
     </div>
     <div id="new" ng-show="nav.$match(nav.new)">
         <div id="new-idea">
@@ -99,25 +98,25 @@
             </div>
         </div>
         <div id="idea-bar">
-            <div id="create-btn" ng-click="createIdea(nav.me, as)">
+            <button id="create-btn" ng-click="createIdea(nav.me, as)">
                 <img src="img/accept.png"/>
                 <span>Submit</span>
-            </div>
-            <div id="cancel-btn" ng-click="nav(nav.home)">
+            </button>
+            <button id="cancel-btn" ng-click="nav(nav.home)">
                 <img src="img/quit.png"/>
                 <span>Cancel</span>
-            </div>
-            <div id="another-btn" ng-click="createIdea(nav.new, as)">
+            </button>
+            <button id="another-btn" ng-click="createIdea(nav.new, as)">
                 <img src="img/new.png"/>
                 <span>Submit + New Idea</span>
-            </div>
+            </button>
         </div>
     </div>
     <div id="new-dep" ng-show="nav.$match(nav.newDep)">
         <label>Name of Dependent <input ng-model="depName"/></label>
         <button ng-click="createDependent(depName)">Create Dependent</button>
     </div>
-    <div id="sign-up" ng-click="init()" ng-hide="authenticated"><div>Get Started</div></div>
+    <button id="sign-up" ng-click="init()" ng-hide="authenticated"><div>Get Started</div></button>
 </div>
 <canvas id="snow"></canvas>
 <script src="js/angular.min.js"></script>
