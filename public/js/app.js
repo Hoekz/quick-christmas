@@ -7,7 +7,7 @@ function(scope,$auth,nav,people,memory,nameFromEmail){
 
     var config = {
         apiKey: 'AIzaSyARYtvFj0Hy5Ki2Xcrvs-dqoBs5yu_GD0I',
-        authDomain: 'quick-christmas-90990.firebaseapp.com',
+        authDomain: location.host,
         databaseURL: 'https://quick-christmas-90990.firebaseio.com/'
     };
 
