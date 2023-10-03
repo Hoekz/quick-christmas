@@ -284,12 +284,5 @@ app.factory('memory', () => ({
 }));
 
 app.factory('$exceptionHandler', ['$log', ($log) => (err, cause) => {
-  firebase.database().ref()
-    .child('errors')
-    .child((new Date()).getTime())
-    .update({
-      message: err.message,
-      stack: err.stack
-    });
   $log.warn(err, cause);
 }]);
