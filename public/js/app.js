@@ -87,7 +87,7 @@ app.controller('control', ['$scope', '$firebaseAuth', 'nav', 'people', 'memory',
     scope.person.ideas.splice(index, 1);
   });
 
-  scope.createDependent = function (name) {
+  scope.createDependent = (name) => {
     const dependent = {
       name: name,
       profile: scope.me.profile,
@@ -118,16 +118,12 @@ app.controller('control', ['$scope', '$firebaseAuth', 'nav', 'people', 'memory',
   nav.$route('/', 'home', updatePeople);
   nav.$route('/search', 'search', updatePeople);
 
-  nav.$route('/:person/ideas', 'ideas', function (params) {
-    people.grabAll(function () {
-      scope.person = people.get(params.person);
-    });
+  nav.$route('/:person/ideas', 'ideas', (params) => {
+    people.grabAll(() => scope.person = people.get(params.person));
   });
 
   nav.$route('/me', 'me', () => {
-    people.grabAll(() => {
-      scope.person = people.get(memory.get('me').name);
-    });
+    people.grabAll(() => scope.person = people.get(memory.get('me').name));
   });
 
   nav.$route('/new', 'new', () => scope.idea = {
@@ -145,7 +141,7 @@ app.controller('control', ['$scope', '$firebaseAuth', 'nav', 'people', 'memory',
   window.onhashchange = () => scope.$digest();
 }]);
 
-app.factory('nav', ['$timeout', function ($timeout) {
+app.factory('nav', ['$timeout', ($timeout) => {
   let param = {};
   let lookup = {};
   let response = {};
@@ -209,7 +205,7 @@ app.factory('nav', ['$timeout', function ($timeout) {
     const loc = decodeURI(location.hash.substring(1));
 
     return patterns.some(pattern => {
-      return ((loc.match(patterns[i]) && patterns[i] instanceof RegExp) || loc === patterns[i]);
+      return ((loc.match(pattern) && pattern instanceof RegExp) || loc === pattern);
     });
   };
 
@@ -229,7 +225,7 @@ app.factory('nav', ['$timeout', function ($timeout) {
 
 var exports = {};
 
-app.factory('people', ['$firebaseArray', function ($Array) {
+app.factory('people', ['$firebaseArray', ($Array) => {
   let ref = null;
   let people = null;
 
