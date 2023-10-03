@@ -6,9 +6,9 @@ function(scope,$auth,nav,people,memory,nameFromEmail){
     scope.dependents = null;
 
     var config = {
-        apiKey: 'AIzaSyAkBsN_Ne7RKopQcSx3LOQkXcl50VQsLho',
-        authDomain: 'quick-christmas-c1eef.firebaseapp.com',
-        databaseURL: 'https://quick-christmas-c1eef.firebaseio.com/'
+        apiKey: 'AIzaSyARYtvFj0Hy5Ki2Xcrvs-dqoBs5yu_GD0I',
+        authDomain: 'quick-christmas-90990.firebaseapp.com',
+        databaseURL: 'https://quick-christmas-90990.firebaseio.com/'
     };
 
     firebase.initializeApp(config);
