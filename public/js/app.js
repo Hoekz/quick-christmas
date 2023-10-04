@@ -16,26 +16,34 @@ app.controller('control', ['$scope', '$firebaseAuth', 'nav', 'people', 'memory',
 
   const auth = $auth();
 
-  auth.$onAuthStateChanged((user) => {
+  const handleAuth = async (user) => {
     scope.authenticated = !!user;
 
     if (scope.authenticated) {
       scope.me = memory.get('me');
 
       if (!scope.me) {
-        const num = Math.floor(Math.random() * 5);
-        const myself = {
-          name: user.displayName || prompt('Please enter your full name'),
-          profile: user.photoURL || '/img/defaults/' + num + '.png',
-          email: user.email,
-          uid: user.uid,
-        };
-        if (!myself.name || !myself.email) {
-          return alert('You do not have permission to access this application.');
+        const list = await new Promise(res => people.grabAll(res));
+        const self = list.find(person => person.uid === user.uid);
+
+        if (self) {
+          memory.set('me', self);
+          scope.me = self;
+        } else {
+          const num = Math.floor(Math.random() * 5);
+          const myself = {
+            name: user.displayName || prompt('Please enter your full name'),
+            profile: user.photoURL || '/img/defaults/' + num + '.png',
+            email: user.email,
+            uid: user.uid,
+          };
+          if (!myself.name || !myself.email) {
+            return alert('You do not have permission to access this application.');
+          }
+          memory.set('me', myself);
+          people.add(myself.uid, myself);
+          scope.me = myself;
         }
-        memory.set('me', myself);
-        people.add(myself.uid, myself);
-        scope.me = myself;
       }
 
       scope.dependents = memory.get('dependents') || null;
@@ -47,14 +55,14 @@ app.controller('control', ['$scope', '$firebaseAuth', 'nav', 'people', 'memory',
         memory.set('dependents', scope.dependents);
       });
     }
-  });
+  };
+
+  auth.$onAuthStateChanged(handleAuth);
 
   scope.authenticated = false;
-  scope.init = () => {
-    auth.$signInWithRedirect('google', { scope: 'email' })
-      .then(() => scope.authenticated = true)
-      .catch((error) => alert('There was an error logging you in.'));
-  };
+  scope.init = () => auth.$signInWithRedirect('google', { scope: 'email' })
+    .then((data) => handleAuth(data?.user))
+    .catch((error) => console.log(error) || alert('There was an error logging you in.'));
 
   scope.search = '';
 
