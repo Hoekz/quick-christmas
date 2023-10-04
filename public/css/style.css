@@ -16,6 +16,10 @@ body {
   border: none;
 }
 
+select option {
+  color: black;
+}
+
 #view {
   position: fixed;
   left: 0;
