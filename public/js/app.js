@@ -255,6 +255,7 @@ app.factory('people', ['$firebaseArray', ($Array) => {
         if (!person) return null;
         return {
           name: person.name,
+          url: '/' + encodeURIComponent(person.name) + '/ideas',
           profile: person.profile,
           email: person.email,
           ideas: toArray(person.ideas),

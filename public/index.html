@@ -37,7 +37,7 @@
         <button ng-repeat="person in people | filter:naughty"
              class="person"
              ng-class="{odd: $index % 2}"
-             ng-click="nav('/' + encodeURIComponent(person.name) + '/ideas')">
+             ng-click="nav(person.url)">
             <img ng-src="{{person.profile}}" />
             <div class="name">{{person.name}}</div>
             <div class="count">{{ideaCount(person.ideas)}}</div>
@@ -46,7 +46,7 @@
         <button ng-repeat="person in people | filter:nice"
              class="person"
              ng-class="{odd: $index % 2}"
-             ng-click="nav('/' + encodeURIComponent(person.name) + '/ideas')">
+             ng-click="nav(person.url)">
             <img ng-src="{{person.profile}}" />
             <div class="name">{{person.name}}</div>
             <div class="count">{{ideaCount(person.ideas)}}</div>
