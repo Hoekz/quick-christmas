@@ -111,7 +111,7 @@ app.controller('control', ['$scope', '$firebaseAuth', 'nav', 'people', 'memory',
     memory.set('dependents', deps);
     scope.dependents = deps;
     scope.depName = '';
-    setTimeout(() => nav('/' + name + '/ideas'), 1000);
+    setTimeout(() => nav('/' + encodeURIComponent(name) + '/ideas'), 1000);
   };
 
   scope.pokePerson = (person) => {
@@ -184,11 +184,13 @@ app.factory('nav', ['$timeout', ($timeout) => {
   };
 
   const nav = (loc) => {
+    console.log('Navigating to', loc);
     if (!loc) return false;
     loc = decodeURI(loc);
     for (const label in nav) {
       if (nav.hasOwnProperty(label) && label[0] !== '$') {
         if ((loc.match(nav[label]) && nav[label] instanceof RegExp) || loc === nav[label]) {
+          console.log('Matched route', label);
           location.hash = loc;
           parse(loc, nav[label], label);
           if (response[label]) {
@@ -198,6 +200,7 @@ app.factory('nav', ['$timeout', ($timeout) => {
         }
       }
     }
+    console.warn('No route found for', loc);
     return false;
   };
 
