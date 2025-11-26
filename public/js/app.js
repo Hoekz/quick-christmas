@@ -174,7 +174,7 @@ app.factory('nav', ['$timeout', ($timeout) => {
     pattern = pattern.split('/').map((sub) => {
       if (sub[0] === ':') {
         lookup[label].push(sub.substr(1));
-        return '([a-zA-z0-9- ]+)';
+        return '([^/]+)';
       } else {
         return sub;
       }
@@ -191,7 +191,7 @@ app.factory('nav', ['$timeout', ($timeout) => {
       if (nav.hasOwnProperty(label) && label[0] !== '$') {
         if ((loc.match(nav[label]) && nav[label] instanceof RegExp) || loc === nav[label]) {
           console.log('Matched route', label);
-          location.hash = loc;
+          location.hash = encodeURI(loc);
           parse(loc, nav[label], label);
           if (response[label]) {
             response[label](param);
